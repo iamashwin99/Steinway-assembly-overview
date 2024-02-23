@@ -29,7 +29,7 @@ def get_sheet_df(sheet_name):
     return piano_df
 
 
-DEMO_FLOORS = ["Floor1", "Floor2", "Floor3", "Floor4", "Floor5", "Floor6"]
+DEMO_DEPARTMENTS = ["Department1", "Department2", "Department3", "Department4", "Department5", "Department6"]
 DEMO_FLOOR_NO_PIANOS = [10,4,13,21,2,3]
 DEMO_SERIAL_NO = [
     "HH-M-135",
@@ -65,7 +65,7 @@ st.set_page_config(
 st.write("# Steinway Assembly Overview")
 selected_view = option_menu(
     None,
-    ["Overview","Floor view", "Piano view"],
+    ["Overview","Department view", "Piano view"],
     icons=["pie-chart-fill","building", "database-fill"],
     orientation="horizontal",
 )
@@ -79,10 +79,10 @@ if selected_view == "Overview":
         for col in cols:
             with col:
                 for _ in range(2):
-                    st.button(f"Floor {i} ({DEMO_FLOOR_NO_PIANOS[i-1]} Pianos)", key=f"floor{i}", help=f"View floor {1}", use_container_width=True, on_click=disable_floor_view)
+                    st.button(f"Department {i} \n ({DEMO_FLOOR_NO_PIANOS[i-1]} Pianos)", key=f"floor{i}", help=f"View floor {1}", use_container_width=True, on_click=disable_floor_view)
                     i+=1
     if st.session_state.overview == "floor_view":
-        st.write("## Floor view")
+        st.write("## Department view")
         # add a plotly plot with drawing.svg in the background
         fig = go.Figure()
         fig.add_layout_image(
@@ -110,10 +110,10 @@ if selected_view == "Overview":
 
 
 
-elif selected_view == "Floor view":
-    st.write("## Floor view")
+elif selected_view == "Department view":
+    st.write("## Department view")
     # add a dropdown to select the floor
-    selected_floor = st.selectbox("Select floor", DEMO_FLOORS)
+    selected_floor = st.selectbox("Select floor", DEMO_DEPARTMENTS)
     st.write(f"Showing production for {selected_floor}")
     floor_df = get_sheet_df(selected_floor)
     st.write(floor_df.head())
