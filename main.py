@@ -8,9 +8,9 @@ Has two views, one for the floor overview and one for the piano production stage
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
-from streamlit_agraph.config import Config, ConfigBuilder
+# from streamlit_agraph.config import Config, ConfigBuilder
 import nivo_chart as nc
-from graph import *
+# from graph import *
 from heatmap import calendar_chart
 
 def get_sheet_df(sheet_name):
@@ -24,7 +24,9 @@ def get_sheet_df(sheet_name):
     piano_df = pd.read_csv(url)
     return piano_df
 
-DEMO_FLOORS = ["Floor1", "Floor2", "Floor3", "Floor4", "Floor5"]
+
+DEMO_FLOORS = ["Floor1", "Floor2", "Floor3", "Floor4", "Floor5", "Floor6"]
+DEMO_FLOOR_NO_PIANOS = [10,4,13,21,2,3]
 DEMO_SERIAL_NO = [
     "HH-M-135",
     "NY-D-235",
@@ -38,6 +40,17 @@ DEMO_SERIAL_NO = [
     "NY-D-159",
 ]
 DEMO_SERIAL_NO.sort()
+
+if 'overview' not in st.session_state:
+    st.session_state['overview'] = 'building_view'
+
+def disable_floor_view():
+    """
+    Disable the floor view and enable the piano view
+
+    """
+    st.session_state.overview = "floor_view"
+
 # wide webapp with sidebar closed.P
 st.set_page_config(
     page_title="Steinway Assembly Overview",
@@ -55,8 +68,20 @@ selected_view = option_menu(
 
 if selected_view == "Overview":
     st.write("## Analytics")
-    # config_builder = ConfigBuilder(nodes)
-    # config = config_builder.build()
+    if st.session_state.overview == "building_view":
+        # make a cloumns of 3 columns each with 2 floors as buttons, which take the whole width and height of the page
+        cols = st.columns(3)
+        i=1
+        for col in cols:
+            with col:
+                for _ in range(2):
+                    st.button(f"Floor {i} ({DEMO_FLOOR_NO_PIANOS[i-1]} Pianos)", key=f"floor{i}", help=f"View floor {1}", use_container_width=True, on_click=disable_floor_view)
+                    i+=1
+    if st.session_state.overview == "floor_view":
+        st.write("## Floor view")
+
+
+
 
 
 elif selected_view == "Floor view":
