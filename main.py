@@ -65,5 +65,12 @@ else:
     # add a searchable dropdown to select the piano serial number
     seleted_piano = st.selectbox("Select piano serial number", DEMO_SERIAL_NO)
     st.write(f"Showing production for {seleted_piano}")
+    st.info(f"""
+### Piano info
+- **Serial number**: {seleted_piano}
+- **Model**: Model M
+- **Finish**: Ebony
+- **Colour**: Purple
+            """)
     floor_df = get_sheet_df(seleted_piano)
     st.write(floor_df.head())
