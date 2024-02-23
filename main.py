@@ -8,8 +8,10 @@ Has two views, one for the floor overview and one for the piano production stage
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
-
-
+from streamlit_agraph.config import Config, ConfigBuilder
+import nivo_chart as nc
+from graph import *
+from heatmap import calendar_chart
 
 def get_sheet_df(sheet_name):
     """
@@ -46,13 +48,18 @@ st.set_page_config(
 st.write("# Steinway Assembly Overview")
 selected_view = option_menu(
     None,
-    ["Floor view", "Piano view"],
-    icons=["building", "database-fill"],
+    ["Overview","Floor view", "Piano view"],
+    icons=["pie-chart-fill","building", "database-fill"],
     orientation="horizontal",
 )
 
+if selected_view == "Overview":
+    st.write("## Analytics")
+    # config_builder = ConfigBuilder(nodes)
+    # config = config_builder.build()
 
-if selected_view == "Floor view":
+
+elif selected_view == "Floor view":
     st.write("## Floor view")
     # add a dropdown to select the floor
     selected_floor = st.selectbox("Select floor", DEMO_FLOORS)
@@ -60,7 +67,7 @@ if selected_view == "Floor view":
     floor_df = get_sheet_df(selected_floor)
     st.write(floor_df.head())
 
-else:
+elif selected_view == "Piano view":
     st.write("## Piano view")
     # add a searchable dropdown to select the piano serial number
     seleted_piano = st.selectbox("Select piano serial number", DEMO_SERIAL_NO)
@@ -74,3 +81,5 @@ else:
             """)
     floor_df = get_sheet_df(seleted_piano)
     st.write(floor_df.head())
+    st.write("## Heatmap")
+    nc.nivo_chart(data=calendar_chart["data"], layout=calendar_chart["layout"], key="calendar_chart")
