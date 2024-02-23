@@ -12,6 +12,10 @@ import pandas as pd
 import nivo_chart as nc
 # from graph import *
 from heatmap import calendar_chart
+import plotly.express as px
+import plotly.graph_objects as go
+from PIL import Image;
+img = Image.open('drawing.png')
 
 def get_sheet_df(sheet_name):
     """
@@ -79,6 +83,28 @@ if selected_view == "Overview":
                     i+=1
     if st.session_state.overview == "floor_view":
         st.write("## Floor view")
+        # add a plotly plot with drawing.svg in the background
+        fig = go.Figure()
+        fig.add_layout_image(
+            dict(
+                x=0,
+                sizex=1,
+                y=1,
+                sizey=1,
+                xref="paper",
+                yref="paper",
+                opacity=1,
+                layer="below",
+                source=img,
+            )
+        )
+        fig.update_xaxes(showgrid=False, zeroline=False, showline=False, showticklabels=False, range=[0, 1])
+        fig.update_yaxes(showgrid=False, zeroline=False, showline=False, showticklabels=False, range=[0, 1])
+        # add a green dot in the top left corner
+        fig.add_trace(go.Scatter(x=[0], y=[0], mode="markers", marker=dict(color="green", size=20)))
+        st.plotly_chart(fig, use_container_width=True)
+
+
 
 
 
