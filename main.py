@@ -34,7 +34,7 @@ st.write("# Steinway Assembly Overview")
 selected_view = option_menu(
     None,
     ["Floor view", "Piano view"],
-    icons=["bulding", "database-fill"],
+    icons=["building", "database-fill"],
     orientation="horizontal",
 )
 
